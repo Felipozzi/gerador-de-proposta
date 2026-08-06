@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, height=1123">
+<style>
+  @page { size: 794px 1123px; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 794px; height: 1123px; background: #f7f7f6; font-family: 'Georgia', 'Times New Roman', serif; }
+  .cover-page { position: relative; width: 794px; height: 1123px; border: none; outline: none; }
+  .layer-0 { position: absolute; inset: 0; z-index: 0; background: #f7f7f6; }
+  .layer-1 { position: absolute; inset: 0; overflow: hidden; z-index: 1; }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(103,97,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(103,97,76,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .accent-block {
+    position: absolute; top: 0; left: 0; width: 95px; height: 1123px;
+    background: linear-gradient(180deg, #67614c 0%, #776a42 100%);
+  }
+  .layer-2 { position: absolute; inset: 0; z-index: 2; }
+  .anchor-line {
+    position: absolute; left: 95px; top: 112px; bottom: 112px;
+    width: 6px; background: #67614c;
+  }
+  .layer-3 { position: absolute; inset: 0; z-index: 3; }
+  .kicker {
+    position: absolute; top: 168px; left: 145px;
+    font-size: 13pt; font-weight: normal; letter-spacing: 3pt;
+    color: #67614c; opacity: 0.6; text-transform: uppercase;
+  }
+  .hero-title {
+    position: absolute; top: 337px; left: 145px; max-width: 580px;
+    font-size: 38pt; font-weight: bold; line-height: 1.15;
+    color: #262523;
+  }
+  .summary {
+    position: absolute; top: 555px; left: 145px; max-width: 480px;
+    font-size: 14pt; font-weight: normal; line-height: 1.6;
+    color: #262523; opacity: 0.85;
+  }
+  .meta {
+    position: absolute; top: 842px; left: 145px;
+    font-size: 13pt; font-weight: normal; line-height: 1.5;
+    color: #7a7871;
+  }
+  .footer-line {
+    position: absolute; bottom: 45px; left: 145px;
+    font-size: 10pt; font-weight: normal; letter-spacing: 2pt;
+    color: #7a7871; opacity: 0.6; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="cover-page">
+  <div class="layer-0"></div>
+  <div class="layer-1">
+    <div class="grid-bg"></div>
+    <div class="accent-block"></div>
+  </div>
+  <div class="layer-2">
+    <div class="anchor-line"></div>
+  </div>
+  <div class="layer-3">
+    <div class="kicker">Proposta Comercial Personalizada</div>
+    <div class="hero-title">Mesa Pronta<br>Gastronomia</div>
+    <div class="summary">Proposta de servico de Personal Chef com sistema alimentar completo para a residencia no Brooklin, Sao Paulo. Refeicoes semanais personalizadas com foco em alimentacao saudavel e praticidade.</div>
+    <div class="meta">Preparado para: Mariana Nascimento<br>Brooklin - Sao Paulo, SP<br>Agosto 2026</div>
+    <div class="footer-line">Mesa Pronta Gastronomia | Consultor Comercial Oficial</div>
+  </div>
+</div>
+</body>
+</html>
