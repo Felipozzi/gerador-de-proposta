@@ -8,7 +8,8 @@ import DiagnosticForm from '@/components/DiagnosticForm';
 import ProposalViewer from '@/components/ProposalViewer';
 import ClientHistory from '@/components/ClientHistory';
 import GeneratingAnimation from '@/components/GeneratingAnimation';
-import { ChefHat, History, Plus } from 'lucide-react';
+import PricingSettings from '@/components/PricingSettings';
+import { ChefHat, History, Plus, Settings } from 'lucide-react';
 import type { AppView, DiagnosticFormData } from '@/lib/types';
 
 export default function Home() {
@@ -19,40 +20,34 @@ export default function Home() {
   const [currentProposalId, setCurrentProposalId] = useState<string>('');
   const [currentClientName, setCurrentClientName] = useState('');
   const [currentClientBairro, setCurrentClientBairro] = useState('');
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubmitForm = async (data: DiagnosticFormData) => {
     setIsGenerating(true);
     try {
-      // Create client
       const clientRes = await fetch('/api/clients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
       const client = await clientRes.json();
-
       if (!client.id) throw new Error('Erro ao criar cliente');
 
       setCurrentClientId(client.id);
       setCurrentClientName(client.nome);
       setCurrentClientBairro(client.bairro);
 
-      // Generate proposal
       const genRes = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId: client.id }),
       });
       const genData = await genRes.json();
-
       if (!genRes.ok) throw new Error(genData.error || 'Erro ao gerar proposta');
 
       setCurrentProposalId(genData.proposalId);
-      setProposalData({
-        etapas: genData.etapas,
-        precificacao: genData.precificacao,
-      });
+      setProposalData({ etapas: genData.etapas, precificacao: genData.precificacao });
       setView('proposal');
       toast({ title: 'Proposta gerada com sucesso!' });
     } catch (error: any) {
@@ -75,7 +70,6 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // Fetch client info
       const clientRes = await fetch(`/api/clients/${clientId}`);
       const client = await clientRes.json();
 
@@ -83,10 +77,7 @@ export default function Home() {
       setCurrentClientName(client.nome);
       setCurrentClientBairro(client.bairro);
       setCurrentProposalId(data.proposalId);
-      setProposalData({
-        etapas: data.etapas,
-        precificacao: data.precificacao,
-      });
+      setProposalData({ etapas: data.etapas, precificacao: data.precificacao });
       setView('proposal');
       toast({ title: 'Proposta regenerada!' });
     } catch (error: any) {
@@ -109,10 +100,7 @@ export default function Home() {
       setCurrentProposalId(proposalId);
       setCurrentClientName(client.nome);
       setCurrentClientBairro(client.bairro);
-      setProposalData({
-        etapas: data.etapas,
-        precificacao: data.precificacao,
-      });
+      setProposalData({ etapas: data.etapas, precificacao: data.precificacao });
       setView('proposal');
     } catch {
       toast({ title: 'Erro ao carregar proposta', variant: 'destructive' });
@@ -135,22 +123,16 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setSettingsOpen(true)}>
+              <Settings className="w-4 h-4" />
+            </Button>
             {view === 'proposal' && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setView('history')}
-              >
+              <Button variant="ghost" size="sm" className="text-xs gap-1" onClick={() => setView('history')}>
                 <History className="w-3.5 h-3.5" /> Histórico
               </Button>
             )}
             {view !== 'form' && view !== 'generating' && (
-              <Button
-                size="sm"
-                className="text-xs gap-1"
-                onClick={() => setView('form')}
-              >
+              <Button size="sm" className="text-xs gap-1" onClick={() => setView('form')}>
                 <Plus className="w-3.5 h-3.5" /> Novo
               </Button>
             )}
@@ -169,10 +151,7 @@ export default function Home() {
         )}
 
         {view === 'form' && (
-          <DiagnosticForm
-            onSubmit={handleSubmitForm}
-            isGenerating={isGenerating}
-          />
+          <DiagnosticForm onSubmit={handleSubmitForm} isGenerating={isGenerating} />
         )}
 
         {view === 'generating' && <GeneratingAnimation />}
@@ -183,6 +162,7 @@ export default function Home() {
             clientBairro={currentClientBairro}
             etapas={proposalData.etapas}
             precificacao={proposalData.precificacao}
+            proposalId={currentProposalId}
             onBack={() => setView('history')}
           />
         )}
@@ -192,6 +172,9 @@ export default function Home() {
       <footer className="mt-auto border-t py-4 text-center text-xs text-muted-foreground">
         <p>&copy; 2026 Mesa Pronta Gastronomia &middot; Sistema de Propostas Comerciais</p>
       </footer>
+
+      {/* Pricing Settings Dialog */}
+      <PricingSettings open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   );
 }

@@ -27,3 +27,24 @@ Stage Summary:
 - Banco de dados SQLite com Prisma (Client + Proposal)
 - Tema visual personalizado para Mesa Pronta Gastronomia
 - Todos os endpoints API funcionando
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Adicionar campo de preços dos serviços
+
+Work Log:
+- Adicionou modelo PricingConfig no Prisma schema (servico, label, valor, unidade, ativo, ordem)
+- Criou API /api/pricing com GET (seed default), PUT (upsert batch), POST (novo), DELETE
+- Criou componente PricingSettings com dialog editável (valores R$, unidade, toggle ativo, adicionar/remover serviços)
+- Atualizou ProposalViewer com precificação editável (campos de valor por sessão, sessões/mês, total mensal, refeições, observações)
+- Cálculo automático: valor/refeição = total mensal / total refeições
+- Atualizou API /api/generate para buscar preços customizados e incluir no prompt da LLM
+- Atualizou API /api/proposals/[id] PATCH para aceitar atualização de precificação
+- Adicionou botão de configurações (engrenagem) no header
+- 7 serviços padrão cadastrados automaticamente
+
+Stage Summary:
+- Tabela de preços editável acessível via ícone de engrenagem no header
+- Preços são usados como referência pela IA na geração de propostas
+- Precificação da proposta é editável após geração com salvamento no banco

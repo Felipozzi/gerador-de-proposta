@@ -47,8 +47,20 @@ model Proposal {
   etapa8        String?  // Pontos a Confirmar
   etapa9        String?  // Mensagem WhatsApp
   etapa10       String?  // Proposta Comercial Final
-  precificacao  String?  // Pricing details
+  precificacao  String?  // Pricing details (JSON)
   status        String   @default("rascunho") // rascunho, gerada, enviada
   criadoEm      DateTime @default(now())
   atualizadoEm  DateTime @updatedAt
+}
+
+model PricingConfig {
+  id              String @id @default(uuid())
+  servico         String @unique // chave do serviço
+  label           String // nome exibido
+  valor           Float  // preço unitário
+  unidade         String // "sessão", "evento", "mês", etc.
+  ativo           Boolean @default(true)
+  ordem           Int    @default(0)
+  criadoEm        DateTime @default(now())
+  atualizadoEm    DateTime @updatedAt
 }

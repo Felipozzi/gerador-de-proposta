@@ -132,12 +132,30 @@ export async function POST(request: NextRequest) {
 
     const userPrompt = buildClientPrompt(client);
 
+    // Fetch custom pricing config
+    let pricingContext = '';
+    try {
+      const pricingRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/pricing`);
+      const pricingData = await pricingRes.json();
+      const activePricing = pricingData.filter((p: any) => p.ativo);
+      if (activePricing.length > 0) {
+        pricingContext = `
+
+--- TABELA DE PREÇOS DA CHEF (USE ESTES VALORES COMO REFERÊNCIA) ---
+${activePricing.map((p: any) => `- ${p.label}: R$ ${p.valor.toFixed(2)} por ${p.unidade}`).join('\n')}
+Regra: o valor por sessão na precificação deve estar dentro da faixa definida acima. Calcule o valor por refeição dividindo o total mensal pelo total de refeições.
+`;
+      }
+    } catch (e) {
+      console.log('Could not fetch pricing config, using defaults');
+    }
+
     // Call LLM to generate proposal
     const result = await zai.chat.completions.create({
       model: 'glm-4-flash',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userPrompt },
+        { role: 'user', content: userPrompt + pricingContext },
       ],
       temperature: 0.7,
       max_tokens: 8000,

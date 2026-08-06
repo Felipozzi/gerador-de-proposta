@@ -15,7 +15,6 @@ export async function GET(
       return NextResponse.json({ error: 'Proposta não encontrada' }, { status: 404 });
     }
 
-    // Parse etapa fields
     const etapas = [];
     for (let i = 1; i <= 10; i++) {
       const field = proposal[`etapa${i}` as keyof typeof proposal] as string | null;
@@ -30,18 +29,10 @@ export async function GET(
 
     let precificacao = null;
     if (proposal.precificacao) {
-      try {
-        precificacao = JSON.parse(proposal.precificacao);
-      } catch {
-        precificacao = null;
-      }
+      try { precificacao = JSON.parse(proposal.precificacao); } catch { precificacao = null; }
     }
 
-    return NextResponse.json({
-      ...proposal,
-      etapas,
-      precificacao,
-    });
+    return NextResponse.json({ ...proposal, etapas, precificacao });
   } catch (error) {
     console.error('Error fetching proposal:', error);
     return NextResponse.json({ error: 'Erro ao buscar proposta' }, { status: 500 });
@@ -56,9 +47,13 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
+    const updateData: any = {};
+    if (body.status) updateData.status = body.status;
+    if (body.precificacao) updateData.precificacao = body.precificacao;
+
     const proposal = await db.proposal.update({
       where: { id },
-      data: { status: body.status },
+      data: updateData,
     });
 
     return NextResponse.json(proposal);
