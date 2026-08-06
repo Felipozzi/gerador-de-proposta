@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  nome      String
+  whatsapp  String
+  email     String?
+  bairro    String
+  indicacao String?
+  moradores Int
+  criancas  Boolean
+  idosos    Boolean
+  animais   Boolean?
+  servico   String   // JSON array of selected services
+  dias      Int      // 7, 15, 30
+  estilo    String   // Tradicional, Saudável, Fitness, etc.
+  restricoes String? // JSON: { has: boolean, alergias: boolean, details: string }
+  preferencias String? // foods that can't be missing
+  rejeicoes String?    // foods they don't like
+  freezer   String   // Pequeno, Médio, Grande
+  compras   String   // Eu, Chef, Ainda não decidi
+  periodo   String   // Manhã, Tarde, Qualquer horário
+  entrega   String   // E-mail, WhatsApp
+  observacoes String?
+  criadoEm  DateTime @default(now())
+  propostas  Proposal[]
+}
+
+model Proposal {
+  id            String   @id @default(uuid())
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  etapa1        String?  // Resumo Executivo
+  etapa2        String?  // Diagnóstico
+  etapa3        String?  // Análise de Restrições
+  etapa4        String?  // Sugestões de Cardápio
+  etapa5        String?  // Justificativa do Cardápio
+  etapa6        String?  // Avaliação de Produção
+  etapa7        String?  // Oportunidades Adicionais
+  etapa8        String?  // Pontos a Confirmar
+  etapa9        String?  // Mensagem WhatsApp
+  etapa10       String?  // Proposta Comercial Final
+  precificacao  String?  // Pricing details
+  status        String   @default("rascunho") // rascunho, gerada, enviada
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+}
