@@ -42,7 +42,11 @@ export default function Home() {
       const genRes = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId: client.id }),
+        body: JSON.stringify({
+          clientId: client.id,
+          valorPorSessao: data.valorPorSessao,
+          sessoesPorMes: data.sessoesPorMes,
+        }),
       });
       const genData = await genRes.json();
       if (!genRes.ok) throw new Error(genData.error || 'Erro ao gerar proposta');

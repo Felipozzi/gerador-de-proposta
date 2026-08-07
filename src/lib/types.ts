@@ -30,6 +30,10 @@ export interface DiagnosticFormData {
   periodo: string;
   entrega: string;
   observacoes: string;
+
+  // Precificação manual (opcional — se preenchido, a IA usa esses valores)
+  valorPorSessao: number | null;
+  sessoesPorMes: number | null;
 }
 
 export interface ClientData {

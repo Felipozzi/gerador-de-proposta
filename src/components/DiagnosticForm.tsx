@@ -10,11 +10,12 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import {
   User, Phone, Mail, MapPin, Users, Baby, Clock, ChefHat,
   Apple, AlertTriangle, ShoppingCart, Snowflake, MessageSquare,
-  ArrowRight, ArrowLeft, Send, Sparkles
+  ArrowRight, ArrowLeft, Send, Sparkles, DollarSign, Calculator
 } from 'lucide-react';
 import type { DiagnosticFormData } from '@/lib/types';
 
@@ -58,6 +59,8 @@ const initialForm: DiagnosticFormData = {
   periodo: 'Qualquer horário',
   entrega: 'WhatsApp',
   observacoes: '',
+  valorPorSessao: null,
+  sessoesPorMes: null,
 };
 
 export default function DiagnosticForm({ onSubmit, isGenerating }: DiagnosticFormProps) {
@@ -410,6 +413,57 @@ export default function DiagnosticForm({ onSubmit, isGenerating }: DiagnosticFor
                 onChange={e => update('observacoes', e.target.value)}
                 rows={3}
               />
+            </div>
+
+            <Separator />
+
+            {/* Precificação */}
+            <div className="space-y-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2 text-base font-semibold">
+                  <DollarSign className="w-4 h-4 text-primary" /> Precificação do Serviço
+                </Label>
+                <Badge variant="outline" className="text-xs">Opcional</Badge>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Defina o valor por sessão e sessões por mês. Se não preencher, a IA sugerirá um preço com base no mercado.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm">Valor por Sessão (R$)</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-muted-foreground">R$</span>
+                    <Input
+                      type="number"
+                      placeholder="Ex: 700"
+                      value={form.valorPorSessao ?? ''}
+                      onChange={e => update('valorPorSessao', e.target.value ? parseFloat(e.target.value) : null)}
+                      className="pl-9"
+                      min={0}
+                      step={50}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm">Sessões por Mês</Label>
+                  <Input
+                    type="number"
+                    placeholder="Ex: 4"
+                    value={form.sessoesPorMes ?? ''}
+                    onChange={e => update('sessoesPorMes', e.target.value ? parseInt(e.target.value) : null)}
+                    min={1}
+                    max={12}
+                  />
+                </div>
+              </div>
+              {form.valorPorSessao && form.sessoesPorMes && (
+                <div className="flex items-center gap-2 rounded-md bg-primary/10 px-3 py-2">
+                  <Calculator className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    Total mensal: <strong className="text-primary">R$ {(form.valorPorSessao * form.sessoesPorMes).toLocaleString('pt-BR')}</strong>
+                  </span>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

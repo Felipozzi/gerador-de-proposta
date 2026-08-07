@@ -39,9 +39,9 @@ ETAPA 7 — OPORTUNIDADES ADICIONAIS: Organização do freezer/despensa, etiquet
 
 ETAPA 8 — PONTOS A CONFIRMAR: Lista objetiva com checkboxes: tamanho do freezer, panela grande, elevador/acesso, estacionamento, horário preferido, responsável pelas compras, etc.
 
-ETAPA 9 — MENSAGEM PARA WHATSAPP: Tom acolhedor, profissional, humano. NUNCA soar como vendedor. Linguagem próxima, como uma chef que já conhece a família. Incluir a precificação de forma natural.
+ETAPA 9 — MENSAGEM PARA WHATSAPP: Tom acolhedor, profissional, humano. NUNCA soar como vendedor. Linguagem próxima, como uma chef que já conhece a família. Incluir a precificação de forma natural e clara com VALORES.
 
-ETAPA 10 — PROPOSTA COMERCIAL FINAL: Estrutura obrigatória: 1. Apresentação, 2. Resumo do diagnóstico, 3. Como funciona o serviço, 4. Cardápio sugerido, 5. Próximos passos, 6. Observações.
+ETAPA 10 — PROPOSTA COMERCIAL FINAL: Estrutura obrigatória: 1. Apresentação, 2. Resumo do diagnóstico, 3. Como funciona o serviço, 4. Cardápio sugerido, 5. INVESTIMENTO (seção de precificação com tabela clara contendo: plano, valor por sessão, sessões por mês, valor total mensal, valor por refeição, total de refeições), 6. Próximos passos, 7. Observações. A seção de INVESTIMENTO é OBRIGATÓRIA e deve conter todos os valores monetários formatados em R$. NUNCA deixe a etapa 10 sem valores.
 
 Para a PRECIFICAÇÃO, gere um objeto JSON separado com:
 - plano: nome do plano sugerido (ex: "Plano Semanal Completo")
@@ -119,7 +119,7 @@ ${client.observacoes || 'Nenhuma observação adicional'}
 
 export async function POST(request: NextRequest) {
   try {
-    const { clientId } = await request.json();
+    const { clientId, valorPorSessao, sessoesPorMes } = await request.json();
 
     // Fetch client data
     const client = await db.client.findUnique({ where: { id: clientId } });
@@ -131,6 +131,38 @@ export async function POST(request: NextRequest) {
     const zai = await ZAI.create();
 
     const userPrompt = buildClientPrompt(client);
+
+    // Add manual pricing if provided by the user, or from last proposal
+    let vSessao = valorPorSessao || null;
+    let sMes = sessoesPorMes || null;
+    if (!vSessao || !sMes) {
+      const lastProposal = await db.proposal.findFirst({
+        where: { clientId },
+        orderBy: { criadoEm: 'desc' },
+      });
+      if (lastProposal?.precificacao) {
+        try {
+          const lastPricing = JSON.parse(lastProposal.precificacao);
+          vSessao = vSessao || lastPricing.valorPorSessao || null;
+          sMes = sMes || lastPricing.sessoesPorMes || null;
+        } catch { /* */ }
+      }
+    }
+    let manualPricingContext = '';
+    if (vSessao && sMes) {
+      manualPricingContext = `
+
+--- PRECIFICAÇÃO DEFINIDA PELA CHEF (USE EXATAMENTE ESTES VALORES) ---
+Valor por sessão: R$ ${Number(vSessao).toFixed(2)}
+Sessões por mês: ${Number(sMes)}
+Valor total mensal: R$ ${(Number(vSessao) * Number(sMes)).toFixed(2)}
+Total de refeições: calcular com base em ${client.moradores} moradores × ${client.dias} dias
+Valor por refeição: calcular (total mensal / total refeições)
+
+ATENÇÃO: Use EXATAMENTE R$ ${Number(vSessao).toFixed(2)} por sessão e ${Number(sMes)} sessões por mês. NÃO altere esses valores.
+Inclua esses valores na ETAPA 10 (Proposta Comercial Final) na seção de INVESTIMENTO de forma clara e profissional.
+Inclua esses valores também na ETAPA 9 (Mensagem WhatsApp) de forma natural.`;
+    }
 
     // Fetch custom pricing config
     let pricingContext = '';
@@ -155,7 +187,7 @@ Regra: o valor por sessão na precificação deve estar dentro da faixa definida
       model: 'glm-4-flash',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userPrompt + pricingContext },
+        { role: 'user', content: userPrompt + manualPricingContext + pricingContext },
       ],
       temperature: 0.7,
       max_tokens: 8000,
