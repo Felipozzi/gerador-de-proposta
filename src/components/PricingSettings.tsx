@@ -225,7 +225,8 @@ export default function PricingSettings({ open, onOpenChange }: PricingSettingsP
             </div>
 
             {/* Add New Service */}
-            <Separator />\n            <div className="space-y-3">
+            <Separator />
+            <div className="space-y-3">
               <p className="text-sm font-medium">Adicionar serviço</p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Input
@@ -266,7 +267,9 @@ export default function PricingSettings({ open, onOpenChange }: PricingSettingsP
                     <p className="text-sm font-medium">Alterações não salvas</p>
                     <p className="text-xs text-muted-foreground">
                       {activeItems.length} serviço{activeItems.length !== 1 ? 's' : ''} ativo{activeItems.length !== 1 ? 's' : ''}
-                      &middot; Valores de {formatBRL(Math.min(...activeItems.map(i => i.valor)))} a {formatBRL(Math.max(...activeItems.map(i => i.valor)))}
+                      {activeItems.length > 0 && <>
+                        &middot; Valores de {formatBRL(Math.min(...activeItems.map(i => i.valor)))} a {formatBRL(Math.max(...activeItems.map(i => i.valor)))}
+                      </>}
                     </p>
                   </div>
                   <Button onClick={save} disabled={saving}>
