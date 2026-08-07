@@ -210,11 +210,11 @@ export default function ProposalViewer({
 
         {/* ESTRUTURA ETAPAS - sem alterações */}
         <TabsContent value="etapas" className="space-y-3 mt-4">
-          {etapas.map((etapa) => {
+          {etapas.map((etapa, idx) => {
             const Icon = ETAPA_ICONS[etapa.etapa] || FileText;
             const isExpanded = expandedEtapa === etapa.etapa;
             return (
-              <Card key={etapa.etapa} className={`transition-all duration-200 ${isExpanded ? 'ring-2 ring-primary/20' : ''}`}>
+              <Card key={`etapa-${etapa.etapa}-${idx}`} className={`transition-all duration-200 ${isExpanded ? 'ring-2 ring-primary/20' : ''}`}>
                 <button className="w-full text-left" onClick={() => setExpandedEtapa(isExpanded ? null : etapa.etapa)}>
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
