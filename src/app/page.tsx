@@ -9,7 +9,7 @@ import ProposalViewer from '@/components/ProposalViewer';
 import ClientHistory from '@/components/ClientHistory';
 import GeneratingAnimation from '@/components/GeneratingAnimation';
 import PricingSettings from '@/components/PricingSettings';
-import { ChefHat, History, Plus, Settings } from 'lucide-react';
+import { History, Plus, Settings } from 'lucide-react';
 import type { AppView, DiagnosticFormData } from '@/lib/types';
 
 export default function Home() {
@@ -118,9 +118,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('history')}>
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <ChefHat className="w-4 h-4 text-primary-foreground" />
-            </div>
+            <img src="/logo-mesa-pronta.png" alt="Mesa Pronta Gastronomia" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h1 className="text-sm font-bold leading-tight">Mesa Pronta</h1>
               <p className="text-[10px] text-muted-foreground leading-tight">Gerador de Propostas</p>
