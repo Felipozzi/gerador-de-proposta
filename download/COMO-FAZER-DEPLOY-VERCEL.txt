@@ -1,0 +1,78 @@
+============================================
+DEPLOY MESA PRONTA NO VERCEL - PASSO A PASSO
+============================================
+
+REQUISITOS:
+- Conta no GitHub (github.com)
+- Conta no Vercel (vercel.com)
+
+---
+
+PASSO 1: CRIAR REPOSITÓRIO NO GITHUB
+1. Acesse https://github.com/new
+2. Nome: mesa-pronta-projetos
+3. Marque "Private" (recomendado)
+4. NÃO marque "Add a README"
+5. Clique em "Create repository"
+
+---
+
+PASSO 2: SUBIR O PROJETO
+1. Descompacte o arquivo mesa-pronta-projetos.tar.gz
+2. Abra o terminal na pasta descompactada
+3. Execute os comandos:
+
+   git init
+   git add .
+   git commit -m "Mesa Pronta - Gerador de Propostas"
+   git remote add origin https://github.com/SEU_USUARIO/mesa-pronta-projetos.git
+   git push -u origin main
+
+---
+
+PASSO 3: CONFIGURAR BANCO DE DADOS
+O sistema usa SQLite local. Para Vercel, recomendo usar o Turso (gratuito):
+
+1. Acesse https://turso.tech e crie uma conta
+2. Crie um banco de dados
+3. Anote a URL e o Auth Token
+
+---
+
+PASSO 4: FAZER DEPLOY NO VERCEL
+1. Acesse https://vercel.com/new
+2. Importe o repositório do GitHub
+3. Configure as variáveis de ambiente:
+
+   DATABASE_URL = "file:./dev.db"
+   (se usar Turso: "libsql://seu-banco.turso.io")
+   ZAI_API_KEY = "sua-chave-z-ai"
+
+4. Clique em "Deploy"
+
+---
+
+PASSO 5: SE USAR SQLITE NO VERCEL (OPÇÃO SIMPLES)
+O Vercel tem sistema de arquivos read-only.
+Para SQLite funcionar, use o Vercel KV ou Turso.
+
+Alternativa mais simples: use o addon "Vercel Postgres" (gratuito no plano hobby).
+Nesse caso, precisará trocar o Prisma para PostgreSQL:
+
+1. No Vercel, vá em Storage > Create Database > Postgres
+2. Copie a connection string
+3. No arquivo prisma/schema.prisma, mude:
+   provider = "postgresql"
+4. No .env, cole a connection string como DATABASE_URL
+5. Execute: npx prisma db push
+
+---
+
+NOTAS IMPORTANTES:
+- O arquivo .env.example tem o template das variáveis
+- O build de produção compila sem erros
+- Sempre que fizer push no GitHub, o Vercel faz deploy automático
+
+DÚVIDAS:
+- Prisma + Vercel: https://www.prisma.io/docs/orm/overview/databases/vercel-postgres
+- Turso (SQLite na nuvem): https://turso.tech/docs
