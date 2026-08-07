@@ -41,7 +41,7 @@ ETAPA 8 — PONTOS A CONFIRMAR: Lista objetiva com checkboxes: tamanho do freeze
 
 ETAPA 9 — MENSAGEM PARA WHATSAPP: Tom acolhedor, profissional, humano. NUNCA soar como vendedor. Linguagem próxima, como uma chef que já conhece a família. NÃO inclua valores nem precificação nesta mensagem — a proposta comercial com valores será enviada em anexo. Inclua obrigatoriamente as informações de pagamento: "Pagamento via PIX na entrega do serviço." e, quando as compras forem feitas pela chef, inclua: "Os valores das compras são restituídos mediante apresentação de nota fiscal." Escreva de forma profissional e elegante.
 
-ETAPA 10 — PROPOSTA COMERCIAL FINAL: Estrutura obrigatória: 1. Apresentação, 2. Resumo do diagnóstico, 3. Como funciona o serviço, 4. Cardápio sugerido, 5. INVESTIMENTO (seção de precificação com tabela clara contendo: plano, valor por sessão, sessões por mês, valor total mensal, valor por refeição, total de refeições), 6. CONDIÇÕES DE PAGAMENTO (pagamento via PIX na entrega do serviço; para compras feitas pela chef, restituição mediante apresentação de nota fiscal), 7. Próximos passos, 8. Observações. A seção de INVESTIMENTO é OBRIGATÓRIA e deve conter todos os valores monetários formatados em R$. A seção de CONDIÇÕES DE PAGAMENTO também é OBRIGATÓRIA. NUNCA deixe a etapa 10 sem valores.
+ETAPA 10 — PROPOSTA COMERCIAL FINAL: Estrutura obrigatória: 1. Apresentação, 2. Resumo do diagnóstico, 3. Como funciona o serviço, 4. Cardápio sugerido, 5. CONDIÇÕES DE PAGAMENTO (pagamento via PIX na entrega do serviço; para compras feitas pela chef, restituição mediante apresentação de nota fiscal), 6. Próximos passos, 7. Observações. A seção de CONDIÇÕES DE PAGAMENTO é OBRIGATÓRIA e deve vir logo após o cardápio. NÃO inclua tabela de preços, valores nem seção de investimento nesta etapa — a precificação fica no documento anexo.
 
 Para a PRECIFICAÇÃO, gere um objeto JSON separado com:
 - plano: nome do plano sugerido (ex: "Plano Semanal Completo")
@@ -160,9 +160,8 @@ Total de refeições: calcular com base em ${client.moradores} moradores × ${cl
 Valor por refeição: calcular (total mensal / total refeições)
 
 ATENÇÃO: Use EXATAMENTE R$ ${Number(vSessao).toFixed(2)} por sessão e ${Number(sMes)} sessões por mês. NÃO altere esses valores.
-Inclua esses valores na ETAPA 10 (Proposta Comercial Final) na seção de INVESTIMENTO de forma clara e profissional.
-Na ETAPA 10, inclua também as condições de pagamento: pagamento via PIX na entrega do serviço; e para compras feitas pela chef, restituição mediante apresentação de nota fiscal.
-NÃO inclua valores na ETAPA 9 (Mensagem WhatsApp) — apenas mencione que a proposta detalhada segue em anexo e inclua as condições de pagamento.`;
+NÃO inclua esses valores na ETAPA 10 (Proposta Comercial Final) — a precificação vai apenas no objeto JSON separado e no documento anexo.
+Na ETAPA 10, inclua apenas as condições de pagamento: PIX na entrega do serviço e restituição de compras com nota fiscal.`;
     }
 
     // Fetch custom pricing config
