@@ -9,6 +9,7 @@ import ProposalViewer from '@/components/ProposalViewer';
 import ClientHistory from '@/components/ClientHistory';
 import GeneratingAnimation from '@/components/GeneratingAnimation';
 import PricingSettings from '@/components/PricingSettings';
+import Image from 'next/image';
 import { History, Plus, Settings } from 'lucide-react';
 import type { AppView, DiagnosticFormData } from '@/lib/types';
 
@@ -118,7 +119,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('history')}>
-            <img src="/logo-mesa-pronta.png" alt="Mesa Pronta Gastronomia" className="w-9 h-9 rounded-full object-cover" />
+            <Image src="/logo-mesa-pronta.webp" alt="Mesa Pronta Gastronomia" width={36} height={36} className="rounded-full object-cover" />
             <div>
               <h1 className="text-sm font-bold leading-tight">Mesa Pronta</h1>
               <p className="text-[10px] text-muted-foreground leading-tight">Gerador de Propostas</p>
