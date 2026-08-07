@@ -215,7 +215,7 @@ export default function ProposalViewer({
             const isExpanded = expandedEtapa === etapa.etapa;
             return (
               <Card key={`etapa-${etapa.etapa}-${idx}`} className={`transition-all duration-200 ${isExpanded ? 'ring-2 ring-primary/20' : ''}`}>
-                <button className="w-full text-left" onClick={() => setExpandedEtapa(isExpanded ? null : etapa.etapa)}>
+                <div className="w-full text-left cursor-pointer" onClick={() => setExpandedEtapa(isExpanded ? null : etapa.etapa)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setExpandedEtapa(isExpanded ? null : etapa.etapa)}>
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -236,7 +236,7 @@ export default function ProposalViewer({
                       </div>
                     </div>
                   </CardHeader>
-                </button>
+                </div>
                 {isExpanded && (
                   <CardContent className="pt-0">
                     <Separator className="mb-4" />
