@@ -118,7 +118,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur border-b">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('history')}>
-            <img src="/logo-mesa-pronta.webp" alt="Mesa Pronta Gastronomia" className="w-9 h-9 rounded-full object-cover" />
+            <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">MP</div>
             <div>
               <h1 className="text-sm font-bold leading-tight">Mesa Pronta</h1>
               <p className="text-[10px] text-muted-foreground leading-tight">Gerador de Propostas</p>
