@@ -25,6 +25,7 @@ export default function Home() {
 
   const handleSubmitForm = async (data: DiagnosticFormData) => {
     setIsGenerating(true);
+    setView('generating');
     try {
       const clientRes = await fetch('/api/clients', {
         method: 'POST',
