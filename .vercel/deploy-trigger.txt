@@ -1,0 +1,5 @@
+Redeploy trigger
+
+This file was updated to trigger a new production deployment from GitHub.
+
+Timestamp: 2026-08-11T20:58:00Z
